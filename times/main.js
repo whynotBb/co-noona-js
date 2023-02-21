@@ -1,9 +1,19 @@
 const menus = document.querySelectorAll(".menus button");
+const searchTxt = document.getElementById("searchTxt");
+const searchBtn = document.getElementById("searchBtn");
+let searchItem = "";
+
+searchBtn.addEventListener("click", () => {
+  searchItem = searchTxt.value;
+  console.log(searchItem);
+  getLatestNews(searchItem);
+});
+
 console.log(menus);
 let category = "";
 menus.forEach((item, idx) => {
   item.addEventListener("click", function () {
-    category = this.innerText;
+    category = this.innerText.toLowerCase();
     getLatestNews(category);
   });
 });
@@ -17,7 +27,23 @@ const getLatestNews = async (category) => {
   );
 
   let header = new Headers({
-    "x-api-key": "jV9SUKRFOuUAq8MZENyC9isSL59KDVWo0sdDl_cQ4q8",
+    "x-api-key": "hjmgah6VkSooZdDWfDsr-t9xAv42iwr-52iPPAHRBcE",
+  });
+  let response = await fetch(url, { headers: header }); // ajax, http , fetch ( 데이터를 받는 방법)
+  let data = await response.json();
+  // async => await 셋트 : 시간이 걸리는 일을 할 때 기다려줘!/ 다음으로 넘기지 말고, 가져올 때 까지 기다리기
+  news = data.articles;
+
+  render();
+  console.log(news);
+};
+const getSearchNews = async (searchItem) => {
+  let url = new URL(
+    `https://api.newscatcherapi.com/v2/search?q=${searchItem}&from=2021/12/15&countries=CA&page_size=1`
+  );
+
+  let header = new Headers({
+    "x-api-key": "hjmgah6VkSooZdDWfDsr-t9xAv42iwr-52iPPAHRBcE",
   });
   let response = await fetch(url, { headers: header }); // ajax, http , fetch ( 데이터를 받는 방법)
   let data = await response.json();
