@@ -32,7 +32,8 @@ li {
   padding: 20px;
 }
 .view_bx .weather_board .now {
-  font-size: 16px;
+  font-size: 13px;
+  color: #fff;
 }
 
 .weather_icon {
@@ -47,6 +48,6 @@ li {
 .bg video {
   -o-object-fit: cover;
      object-fit: cover;
-  width: 100vw;
-  height: auto;
+  width: auto;
+  height: 100vh;
 }

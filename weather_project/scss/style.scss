@@ -28,7 +28,8 @@ li {
   .weather_board {
     padding: 20px;
     .now {
-      font-size: 16px;
+      font-size: 13px;
+      color: #fff;
     }
   }
 }
@@ -41,7 +42,7 @@ li {
   overflow: hidden;
   video {
     object-fit: cover;
-    width: 100vw;
-    height: auto;
+    width: auto;
+    height: 100vh;
   }
 }
