@@ -21,7 +21,7 @@ li {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 250px;
+  width: 500px;
   height: 300px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -32,7 +32,7 @@ li {
   padding: 20px;
 }
 .view_bx .weather_board .now {
-  font-size: 13px;
+  font-size: 1em;
   color: #fff;
 }
 
@@ -48,6 +48,6 @@ li {
 .bg video {
   -o-object-fit: cover;
      object-fit: cover;
-  width: auto;
+  width: 100vw;
   height: 100vh;
 }
