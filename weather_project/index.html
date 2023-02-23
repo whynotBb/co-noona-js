@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>How's the weather today?</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="./js/main.js" defer></script>
 
     <link
       rel="stylesheet"
@@ -17,20 +20,31 @@
     />
 
     <link rel="stylesheet" href="./css/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/main.js" defer></script>
   </head>
   <body>
     <section class="container-fluid">
       <div class="bg">
         <video src="./resource/rainy.mp4" muted autoplay></video>
       </div>
+      <div class="now text-center">2023-02-22 PM 5:12</div>
       <div class="view_bx">
+        <div class="search_wrap">
+          <div class="input_box">
+            <span class="material-symbols-outlined search_open">search</span>
+            <input
+              type="text"
+              id="search_input"
+              placeholder="검색 도시를 영어로 입력해 주세요"
+            />
+            <button id="search_btn" class="material-symbols-outlined">
+              search
+            </button>
+          </div>
+        </div>
         <div class="weather_board">
-          <div class="now text-center">2023-02-22 PM 5:12</div>
           <div class="weather">
             <p class="city">seoul</p>
-            <p class="material-symbols-outlined weather_icon">sunny</p>
+            <p class="weather_icon"></p>
             <p class="temperature">-4°C</p>
             <p class="Feel_like">Feels like -4°C. Clear sky. Light air</p>
           </div>
