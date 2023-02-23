@@ -91,12 +91,21 @@ searchOpen.addEventListener("click", () => {
   inputBox.classList.add("on");
 });
 searchBtn.addEventListener("click", () => {
+  search();
+});
+searchInput.addEventListener("keyup", (e) => {
+  if (e.keyCode === 13) {
+    search();
+  }
+});
+
+const search = () => {
   searchWord = searchInput.value;
   searchInput.value = "";
   console.log(searchWord);
   getSearchWeather();
   inputBox.classList.remove("on");
-});
+};
 
 const getSearchWeather = async () => {
   const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
