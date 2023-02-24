@@ -163,8 +163,12 @@ hr {
 }
 .view_bx .now {
   position: relative;
-  top: inherit;
-  left: inherit;
+  top: 0;
+  left: 0;
+  background: none;
+  box-shadow: none;
+  text-align: right;
+  font-size: 15px;
 }
 
 .weather_icon::before {
