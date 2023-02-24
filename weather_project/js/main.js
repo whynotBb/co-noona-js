@@ -37,6 +37,7 @@ function success(pos) {
   lat = crd.latitude;
   lon = crd.longitude;
   getWeather();
+  getForecastWeather();
 }
 
 function error(err) {
@@ -59,7 +60,7 @@ const getWeather = async () => {
   temp_max = data.main.temp_max - 273.15;
   temp_min = data.main.temp_min - 273.15;
   Feels_like = data.main.feels_like - 273.15;
-  console.log(data);
+  console.log("현재날씨", data);
 
   render();
 };
@@ -87,8 +88,10 @@ const searchOpen = document.querySelector(".search_open");
 const searchInput = document.getElementById("search_input");
 const searchBtn = document.getElementById("search_btn");
 let searchWord;
+let page = 1;
 searchOpen.addEventListener("click", () => {
   inputBox.classList.add("on");
+  searchInput.focus();
 });
 searchBtn.addEventListener("click", () => {
   search();
@@ -104,6 +107,8 @@ const search = () => {
   searchInput.value = "";
   console.log(searchWord);
   getSearchWeather();
+  searchForecastWeather();
+  page = 7; //나중에 1로 바꾸기
   inputBox.classList.remove("on");
 };
 
@@ -124,4 +129,116 @@ const getSearchWeather = async () => {
   console.log(data);
 
   render();
+};
+//4. 현재위치의 예보가져오기
+const forecastBoard = document.querySelector(".forecast_board");
+const forecastBtn = document.querySelector(".forecast_board > p");
+let forecastItem;
+let forecastItemGroup;
+
+forecastBtn.addEventListener("click", () => {
+  forecastBoard.classList.toggle("on");
+});
+const getForecastWeather = async () => {
+  const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
+  url = new URL(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_key}`
+  );
+  let response = await fetch(url);
+  let data = await response.json();
+  forecastItem = data.list;
+  forecastItemGroup = division(forecastItem, 5);
+
+  console.log("예보", forecastItem);
+  console.log(forecastItemGroup);
+
+  forecastRender();
+  pagination();
+};
+const searchForecastWeather = async () => {
+  const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
+  url = new URL(
+    `https://api.openweathermap.org/data/2.5/forecast?q=${searchWord}&appid=${API_key}`
+  );
+  let response = await fetch(url);
+  let data = await response.json();
+  forecastItem = data.list;
+  forecastItemGroup = division(forecastItem, 5);
+
+  console.log("검색예보", forecastItem);
+  console.log(forecastItemGroup);
+
+  forecastRender();
+  pagination();
+};
+const division = (arr, num) => {
+  const length = arr.length;
+  const divide =
+    Math.floor(length / num) + (Math.floor(length % num) > 0 ? 1 : 0);
+  const newArray = [];
+
+  for (let i = 0; i <= divide; i++) {
+    // 배열 0부터 n개씩 잘라 새 배열에 넣기
+    newArray.push(arr.splice(0, num));
+  }
+
+  return newArray;
+};
+
+const forecastRender = () => {
+  let weatherHTML = "";
+  weatherHTML = forecastItemGroup[page - 1]
+    .map((item) => {
+      return `
+    <ul>
+      <li>${item.dt_txt}</li>
+      <li class="weather_icon ${`${item.weather[0].main}`.toLowerCase()}"></li>
+      <li>${Math.round(((item.main.temp - 273.15) * 10) / 10)}°C</li>
+      <li><span class="material-symbols-outlined">toys_fan</span>${
+        item.wind.speed
+      }</li>
+      <li><span class="material-symbols-outlined">umbrella</span>${
+        item.pop
+      }%</li>
+    </ul>
+    `;
+    })
+    .join("");
+  document.querySelector(".forecast_list").innerHTML = weatherHTML;
+};
+
+// pagination
+const pagination = () => {
+  let paginationHtml = "";
+  let pageGroup = Math.ceil(page / 5);
+  const last = pageGroup * 5;
+  const first = last - 4;
+  paginationHtml = `
+    <li class="page-item">
+      <a class="page-link ${
+        page < 6 ? "disabled" : ""
+      }" href="#" aria-label="Previous" moveToPrev()>
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+  `;
+  for (let i = first; i <= last; i++) {
+    paginationHtml += `
+      <li class="page-item"><a class="page-link ${
+        page == i ? "active" : ""
+      }" href="#" onclick="moveToPage(${i})">${i}</a></li>
+    `;
+  }
+  paginationHtml += `
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  `;
+  document.querySelector(".pagination").innerHTML = paginationHtml;
+};
+const moveToPage = (pageNum) => {
+  page = pageNum;
+  getForecastWeather();
 };
