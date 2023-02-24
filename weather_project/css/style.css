@@ -124,6 +124,10 @@ hr {
 .view_bx .search_wrap .input_box:hover + .search_info {
   display: block;
 }
+.view_bx .search_wrap .error_toast .toast {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
 .view_bx .weather_board {
   padding: 20px 0;
 }

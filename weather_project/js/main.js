@@ -20,6 +20,7 @@ ${year}-${month < 10 ? `0${month}` : month}-${date < 10 ? `0${date} ` : date} ${
 getClock();
 setInterval(getClock, 1000);
 //2. 현재 위치 가져와서 기본 날씨 보여주기
+const API_key = config.apikey;
 let url;
 let lat;
 let lon;
@@ -47,7 +48,7 @@ function error(err) {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 const getWeather = async () => {
-  const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
+  // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
   url = new URL(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}&lang=KR`
   );
@@ -113,22 +114,44 @@ const search = () => {
 };
 
 const getSearchWeather = async () => {
-  const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
-  url = new URL(
-    `https://api.openweathermap.org/data/2.5/weather?q=${searchWord}&appid=${API_key}&lang=KR`
-  );
-  let response = await fetch(url);
-  let data = await response.json();
-  weather_main = data.weather[0].main;
-  weather_desc = data.weather[0].description;
-  city = data.name;
-  temp = data.main.temp - 273.15;
-  temp_max = data.main.temp_max - 273.15;
-  temp_min = data.main.temp_min - 273.15;
-  Feels_like = data.main.feels_like - 273.15;
-  console.log(data);
-
-  render();
+  try {
+    // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
+    url = new URL(
+      `https://api.openweathermap.org/data/2.5/weather?q=${searchWord}&appid=${API_key}&lang=KR`
+    );
+    let response = await fetch(url);
+    let data = await response.json();
+    if (response.status == 200) {
+      weather_main = data.weather[0].main;
+      weather_desc = data.weather[0].description;
+      city = data.name;
+      temp = data.main.temp - 273.15;
+      temp_max = data.main.temp_max - 273.15;
+      temp_min = data.main.temp_min - 273.15;
+      Feels_like = data.main.feels_like - 273.15;
+      console.log(data);
+      render();
+    } else {
+      throw new Error(data.message);
+    }
+  } catch (error) {
+    console.log("catch error", error.message);
+    errorRender(error.message);
+  }
+};
+// 에러 메시지 보여주기
+const errorRender = (message) => {
+  let errorHtml = `
+  <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+    ${message} = ${searchWord}
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+  `;
+  document.querySelector(".error_toast").innerHTML = errorHtml;
 };
 //4. 현재위치의 예보가져오기
 const forecastBoard = document.querySelector(".forecast_board");
@@ -140,7 +163,7 @@ forecastBtn.addEventListener("click", () => {
   forecastBoard.classList.toggle("on");
 });
 const getForecastWeather = async () => {
-  const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
+  // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
   url = new URL(
     `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_key}`
   );
@@ -156,7 +179,7 @@ const getForecastWeather = async () => {
   pagination();
 };
 const searchForecastWeather = async () => {
-  const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
+  // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
   url = new URL(
     `https://api.openweathermap.org/data/2.5/forecast?q=${searchWord}&appid=${API_key}`
   );

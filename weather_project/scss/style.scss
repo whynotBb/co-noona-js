@@ -116,6 +116,12 @@ hr {
         display: block;
       }
     }
+    .error_toast {
+      .toast {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.6);
+      }
+    }
   }
   .weather_board {
     padding: 20px 0;
