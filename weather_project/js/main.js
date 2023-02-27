@@ -88,11 +88,23 @@ const inputBox = document.querySelector(".input_box");
 const searchOpen = document.querySelector(".search_open");
 const searchInput = document.getElementById("search_input");
 const searchBtn = document.getElementById("search_btn");
+// 검색리스트 태그기능
+const searchListBoard = document.querySelector(".search_list_board");
+const searchListBoardBtn = document.querySelector(".tag_reset");
+
+searchListBoardBtn.addEventListener("click", () => {
+  searchListBoard.classList.remove("show");
+});
+
 let searchWord;
 let page = 1;
 searchOpen.addEventListener("click", () => {
   inputBox.classList.add("on");
   searchInput.focus();
+  if (document.querySelector(".toast ")) {
+    document.querySelector(".toast ").classList.remove("show");
+  } else {
+  }
 });
 searchBtn.addEventListener("click", () => {
   search();
@@ -104,18 +116,22 @@ searchInput.addEventListener("keyup", (e) => {
 });
 
 const search = () => {
+  const patternEn = /[a-zA-Z]/g;
   searchWord = searchInput.value;
+  if (patternEn.test(searchWord)) {
+    console.log(searchWord);
+    getSearchWeather();
+    searchForecastWeather();
+    page = 1;
+  } else {
+    errorRender("영어로입력해주세요");
+  }
   searchInput.value = "";
-  console.log(searchWord);
-  getSearchWeather();
-  searchForecastWeather();
-  page = 7; //나중에 1로 바꾸기
   inputBox.classList.remove("on");
 };
 
 const getSearchWeather = async () => {
   try {
-    // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
     url = new URL(
       `https://api.openweathermap.org/data/2.5/weather?q=${searchWord}&appid=${API_key}&lang=KR`
     );
@@ -131,6 +147,8 @@ const getSearchWeather = async () => {
       Feels_like = data.main.feels_like - 273.15;
       console.log(data);
       render();
+      searchListRender();
+      searchListBoard.classList.add("show");
     } else {
       throw new Error(data.message);
     }
@@ -145,7 +163,7 @@ const errorRender = (message) => {
   <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true">
   <div class="d-flex">
     <div class="toast-body">
-    ${message} = ${searchWord}
+    ${message} = '${searchWord}'
     </div>
     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
@@ -153,6 +171,31 @@ const errorRender = (message) => {
   `;
   document.querySelector(".error_toast").innerHTML = errorHtml;
 };
+const searchListRender = () => {
+  console.log("searchListRender=", searchWord);
+  // let searchTags = [];
+  // let searchTag = document.querySelectorAll(".tag");
+  // console.log(searchTag);
+  // for (let i = 0; i < searchTag.length; i++) {
+  //   console.log(searchTag.textContent);
+  //   searchTags.push(searchTag.innerText);
+  // }
+  // console.log(searchTags);
+  let searchListHTML = "";
+  searchListHTML = `
+  <li><span class="tag" onclick="reSearch(this)">${searchWord}</span><span class="material-symbols-outlined tag_del" onclick="tagDelete(this)">close</span></li>
+  `;
+  document.querySelector(".search_list_board ul").innerHTML += searchListHTML;
+};
+const tagDelete = (el) => {
+  el.parentElement.remove();
+};
+const reSearch = (el) => {
+  console.log(el.innerText);
+  searchWord = el.innerText;
+  getSearchWeather();
+};
+
 //4. 현재위치의 예보가져오기
 const forecastBoard = document.querySelector(".forecast_board");
 const forecastBtn = document.querySelector(".forecast_board > p");
@@ -214,12 +257,12 @@ const forecastRender = () => {
     .map((item) => {
       return `
     <ul>
-      <li>${item.dt_txt}</li>
+      <li>${`${item.dt_txt}`.substr(5, 11)}</li>
       <li class="weather_icon ${`${item.weather[0].main}`.toLowerCase()}"></li>
       <li>${Math.round(((item.main.temp - 273.15) * 10) / 10)}°C</li>
       <li><span class="material-symbols-outlined">toys_fan</span>${
         item.wind.speed
-      }</li>
+      }m/s</li>
       <li><span class="material-symbols-outlined">umbrella</span>${
         item.pop
       }%</li>
@@ -232,34 +275,39 @@ const forecastRender = () => {
 
 // pagination
 const pagination = () => {
-  let paginationHtml = "";
-  let pageGroup = Math.ceil(page / 5);
-  const last = pageGroup * 5;
-  const first = last - 4;
-  paginationHtml = `
+  let paginationHTML = "";
+  let pageGroup = Math.ceil(page / 4);
+
+  const last = pageGroup * 4;
+  const first = last - 3;
+  paginationHTML = `
     <li class="page-item">
       <a class="page-link ${
-        page < 6 ? "disabled" : ""
-      }" href="#" aria-label="Previous" moveToPrev()>
+        page < 5 ? "disabled" : ""
+      }" href="#" aria-label="Previous" onclick="moveToPage(1)">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
   `;
   for (let i = first; i <= last; i++) {
-    paginationHtml += `
+    paginationHTML += `
       <li class="page-item"><a class="page-link ${
         page == i ? "active" : ""
       }" href="#" onclick="moveToPage(${i})">${i}</a></li>
     `;
   }
-  paginationHtml += `
+  paginationHTML += `
     <li class="page-item">
-      <a class="page-link" href="#" aria-label="Next">
+      <a class="page-link ${
+        page > 4 ? "disabled" : ""
+      }" href="#" aria-label="Next" onclick="moveToPage(${
+    forecastItemGroup.length - 1
+  })">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
   `;
-  document.querySelector(".pagination").innerHTML = paginationHtml;
+  document.querySelector(".pagination").innerHTML = paginationHTML;
 };
 const moveToPage = (pageNum) => {
   page = pageNum;

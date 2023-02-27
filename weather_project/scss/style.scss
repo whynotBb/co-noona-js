@@ -117,6 +117,7 @@ hr {
       }
     }
     .error_toast {
+      padding-top: 10px;
       .toast {
         width: 100%;
         background: rgba(0, 0, 0, 0.6);
@@ -221,15 +222,16 @@ hr {
     }
   }
   .forecast_list {
-    padding: 0 20px;
+    padding: 0 30px;
     ul {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       li {
-        height: 30px;
-        line-height: 30px;
+        height: 32px;
+        line-height: 32px;
         font-size: 15px;
+        margin-bottom: 2px;
         .material-symbols-outlined {
           vertical-align: middle;
           font-size: 18px;
@@ -237,6 +239,16 @@ hr {
         &.weather_icon::before {
           width: 25px;
           height: 25px;
+        }
+        &:nth-child(3) {
+          // font-size: 16px;
+          color: #fff;
+        }
+        .min {
+          color: #297ae4;
+        }
+        .max {
+          color: #fa5246;
         }
       }
     }
@@ -276,5 +288,51 @@ hr {
     p span {
       transform: rotate(180deg);
     }
+  }
+}
+.search_list_board {
+  width: 0;
+  position: absolute;
+  // width: 250px;
+  overflow: hidden;
+  background: rgb(0 0 0 / 70%);
+  min-height: 300px;
+  top: 10px;
+  left: 410px;
+  // transition: width 0.3s ease;
+  border-radius: 6px;
+  // padding: 30px 15px 15px;
+  .tag_reset {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    li {
+      border: 1px solid #297ae4;
+      // background: rgb(41, 122, 228, 0.7);
+      padding: 0 10px;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 15px;
+      color: #bbb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .tag_del {
+        margin-left: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #297ae4;
+      }
+    }
+  }
+  &.show {
+    width: 250px;
+    padding: 30px 15px 15px;
   }
 }
