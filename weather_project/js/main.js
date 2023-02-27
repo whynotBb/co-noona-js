@@ -91,10 +91,6 @@ const searchBtn = document.getElementById("search_btn");
 const searchListBoard = document.querySelector(".search_list_board");
 const searchListBoardBtn = document.querySelector(".tag_reset");
 
-searchListBoardBtn.addEventListener("click", () => {
-  searchListBoard.classList.remove("show");
-});
-
 let searchWord;
 let searchWordArr = [];
 let page = 1;
@@ -179,11 +175,6 @@ const searchListRender = () => {
   console.log("searchListRender=", searchWord, searchWordArr);
   let searchWordRenderArr = searchWordArr.slice(-5);
   let searchListHTML = "";
-  // searchListHTML = `
-  // <li><span class="tag" onclick="reSearch(this)">${searchWord}</span><span class="material-symbols-outlined tag_del" onclick="tagDelete(this)">close</span></li>
-  // `;
-  // document.querySelector(".search_list_board ul").innerHTML += searchListHTML;
-
   searchWordRenderArr.forEach((item, idx) => {
     searchListHTML += `<li><span class="tag" onclick="reSearch(this)">${item}</span><span class="material-symbols-outlined tag_del" onclick="tagDelete(this)">close</span></li>`;
   });
@@ -191,12 +182,23 @@ const searchListRender = () => {
 };
 const tagDelete = (el) => {
   el.parentElement.remove();
+  searchWordArr.splice(
+    searchWordArr.indexOf(el.parentElement.firstChild.innerText),
+    1
+  );
+  if (searchWordArr.length == 0) {
+    searchListBoard.classList.remove("show");
+  }
 };
 const reSearch = (el) => {
   console.log(el.innerText);
   searchWord = el.innerText;
   getSearchWeather();
 };
+searchListBoardBtn.addEventListener("click", () => {
+  searchListBoard.classList.remove("show");
+  searchWordArr = [];
+});
 
 //4. 현재위치의 예보가져오기
 const forecastBoard = document.querySelector(".forecast_board");
@@ -223,7 +225,6 @@ const getForecastWeather = async () => {
   pagination();
 };
 const searchForecastWeather = async () => {
-  // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
   url = new URL(
     `https://api.openweathermap.org/data/2.5/forecast?q=${searchWord}&appid=${API_key}`
   );

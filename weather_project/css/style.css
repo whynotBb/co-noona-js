@@ -334,3 +334,10 @@ hr {
 .search_list_board.show {
   display: block;
 }
+
+@media (max-width: 400px) {
+  .view_bx {
+    top: 50px;
+    width: calc(100vw - 10px);
+  }
+}
