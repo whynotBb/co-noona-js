@@ -48,7 +48,6 @@ function error(err) {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 const getWeather = async () => {
-  // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
   url = new URL(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}&lang=KR`
   );
@@ -97,6 +96,7 @@ searchListBoardBtn.addEventListener("click", () => {
 });
 
 let searchWord;
+let searchWordArr = [];
 let page = 1;
 searchOpen.addEventListener("click", () => {
   inputBox.classList.add("on");
@@ -120,6 +120,7 @@ const search = () => {
   searchWord = searchInput.value;
   if (patternEn.test(searchWord)) {
     console.log(searchWord);
+
     getSearchWeather();
     searchForecastWeather();
     page = 1;
@@ -146,6 +147,9 @@ const getSearchWeather = async () => {
       temp_min = data.main.temp_min - 273.15;
       Feels_like = data.main.feels_like - 273.15;
       console.log(data);
+      if (!searchWordArr.includes(searchWord)) {
+        searchWordArr.push(searchWord);
+      }
       render();
       searchListRender();
       searchListBoard.classList.add("show");
@@ -172,20 +176,18 @@ const errorRender = (message) => {
   document.querySelector(".error_toast").innerHTML = errorHtml;
 };
 const searchListRender = () => {
-  console.log("searchListRender=", searchWord);
-  // let searchTags = [];
-  // let searchTag = document.querySelectorAll(".tag");
-  // console.log(searchTag);
-  // for (let i = 0; i < searchTag.length; i++) {
-  //   console.log(searchTag.textContent);
-  //   searchTags.push(searchTag.innerText);
-  // }
-  // console.log(searchTags);
+  console.log("searchListRender=", searchWord, searchWordArr);
+  let searchWordRenderArr = searchWordArr.slice(-5);
   let searchListHTML = "";
-  searchListHTML = `
-  <li><span class="tag" onclick="reSearch(this)">${searchWord}</span><span class="material-symbols-outlined tag_del" onclick="tagDelete(this)">close</span></li>
-  `;
-  document.querySelector(".search_list_board ul").innerHTML += searchListHTML;
+  // searchListHTML = `
+  // <li><span class="tag" onclick="reSearch(this)">${searchWord}</span><span class="material-symbols-outlined tag_del" onclick="tagDelete(this)">close</span></li>
+  // `;
+  // document.querySelector(".search_list_board ul").innerHTML += searchListHTML;
+
+  searchWordRenderArr.forEach((item, idx) => {
+    searchListHTML += `<li><span class="tag" onclick="reSearch(this)">${item}</span><span class="material-symbols-outlined tag_del" onclick="tagDelete(this)">close</span></li>`;
+  });
+  document.querySelector(".search_list_board ul").innerHTML = searchListHTML;
 };
 const tagDelete = (el) => {
   el.parentElement.remove();
@@ -206,7 +208,6 @@ forecastBtn.addEventListener("click", () => {
   forecastBoard.classList.toggle("on");
 });
 const getForecastWeather = async () => {
-  // const API_key = "6dd95cfc5f180ab7bf62671b417e6c68";
   url = new URL(
     `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_key}`
   );

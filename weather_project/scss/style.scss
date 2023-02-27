@@ -151,10 +151,10 @@ hr {
       .temp_minmax {
         text-shadow: 1px 1px 5px black;
         .min {
-          color: #297ae4;
+          color: #4d93fc;
         }
         .max {
-          color: #fa5246;
+          color: #e2655c;
         }
       }
       .feels_like {
@@ -245,7 +245,7 @@ hr {
           color: #fff;
         }
         .min {
-          color: #297ae4;
+          color: #4d93fc;
         }
         .max {
           color: #fa5246;
@@ -291,21 +291,18 @@ hr {
   }
 }
 .search_list_board {
-  width: 0;
-  position: absolute;
-  // width: 250px;
+  position: relative;
+  width: 100%;
   overflow: hidden;
   background: rgb(0 0 0 / 70%);
-  min-height: 300px;
-  top: 10px;
-  left: 410px;
-  // transition: width 0.3s ease;
+  height: auto;
+  display: none;
   border-radius: 6px;
-  // padding: 30px 15px 15px;
+  padding: 20px 15px 15px;
   .tag_reset {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 2px;
+    right: 3px;
     cursor: pointer;
   }
   ul {
@@ -323,6 +320,9 @@ hr {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      .tag {
+        cursor: pointer;
+      }
       .tag_del {
         margin-left: 8px;
         cursor: pointer;
@@ -332,7 +332,8 @@ hr {
     }
   }
   &.show {
-    width: 250px;
-    padding: 30px 15px 15px;
+    display: block;
+    // width: 250px;
+    // padding: 30px 15px 15px;
   }
 }

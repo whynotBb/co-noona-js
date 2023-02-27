@@ -160,10 +160,10 @@ hr {
   text-shadow: 1px 1px 5px black;
 }
 .view_bx .weather_board .weather .temp_minmax .min {
-  color: #297ae4;
+  color: #4d93fc;
 }
 .view_bx .weather_board .weather .temp_minmax .max {
-  color: #fa5246;
+  color: #e2655c;
 }
 .view_bx .weather_board .weather .feels_like {
   width: 100%;
@@ -251,7 +251,7 @@ hr {
   color: #fff;
 }
 .forecast_board .forecast_list ul li .min {
-  color: #297ae4;
+  color: #4d93fc;
 }
 .forecast_board .forecast_list ul li .max {
   color: #fa5246;
@@ -291,19 +291,19 @@ hr {
 }
 
 .search_list_board {
-  width: 0;
-  position: absolute;
+  position: relative;
+  width: 100%;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.7);
-  min-height: 300px;
-  top: 10px;
-  left: 410px;
+  height: auto;
+  display: none;
   border-radius: 6px;
+  padding: 20px 15px 15px;
 }
 .search_list_board .tag_reset {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 2px;
+  right: 3px;
   cursor: pointer;
 }
 .search_list_board ul {
@@ -322,6 +322,9 @@ hr {
   align-items: center;
   justify-content: space-between;
 }
+.search_list_board ul li .tag {
+  cursor: pointer;
+}
 .search_list_board ul li .tag_del {
   margin-left: 8px;
   cursor: pointer;
@@ -329,6 +332,5 @@ hr {
   color: #297ae4;
 }
 .search_list_board.show {
-  width: 250px;
-  padding: 30px 15px 15px;
+  display: block;
 }
