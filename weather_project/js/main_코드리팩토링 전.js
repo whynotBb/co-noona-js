@@ -19,13 +19,20 @@ ${year}-${month < 10 ? `0${month}` : month}-${date < 10 ? `0${date} ` : date} ${
 };
 getClock();
 setInterval(getClock, 1000);
-
 //2. 현재 위치 가져와서 기본 날씨 보여주기
 const API_key = config.apikey;
 let url;
-let lat, lon, weather, city, weather_temps, feels_like;
+let lat;
+let lon;
+let weather;
+let city;
+let weather_temps;
+const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
 
-// 현재위치 가져오기
 function success(pos) {
   const crd = pos.coords;
   lat = crd.latitude;
@@ -37,15 +44,9 @@ function success(pos) {
 function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
-const options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0,
-};
 
 navigator.geolocation.getCurrentPosition(success, error, options);
 
-// 날씨 API → data json → 날씨 데이터 뽑아오기
 const getWeather = async () => {
   url = new URL(
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}&lang=KR`
@@ -58,12 +59,11 @@ const getWeather = async () => {
   temp = data.main.temp - 273.15;
   temp_max = data.main.temp_max - 273.15;
   temp_min = data.main.temp_min - 273.15;
-  feels_like = data.main.feels_like - 273.15;
+  Feels_like = data.main.feels_like - 273.15;
   console.log("현재날씨", data);
+
   render();
 };
-
-// 뽑아온 날씨 데이터 그려주기
 const render = () => {
   let weatherHTML = "";
   weatherHTML = `
@@ -76,7 +76,7 @@ const render = () => {
     Math.round(temp_max * 10) / 10
   }°C</span></p>
     <p class="feels_like">체감온도 ${
-      Math.round(feels_like * 10) / 10
+      Math.round(Feels_like * 10) / 10
     }°C : ${weather_desc}</p>
     `;
   document.querySelector(".weather").innerHTML = weatherHTML;
@@ -94,16 +94,14 @@ const searchListBoardBtn = document.querySelector(".tag_reset");
 let searchWord;
 let searchWordArr = [];
 let page = 1;
-
-// 검색창 열기 → intpu포커스 → 이전에 보여주던 토스트가 있다면 없애기
 searchOpen.addEventListener("click", () => {
   inputBox.classList.add("on");
   searchInput.focus();
   if (document.querySelector(".toast ")) {
     document.querySelector(".toast ").classList.remove("show");
+  } else {
   }
 });
-// 서치 버튼, 엔터키 누르면 검색함수 실행
 searchBtn.addEventListener("click", () => {
   search();
 });
@@ -113,10 +111,6 @@ searchInput.addEventListener("keyup", (e) => {
   }
 });
 
-// 검색 :
-// 1. 한글을 입력 → 영어로 입력 안내 후 검색 x
-// 2. 현재 날씨 / 예보 날씨 업데이트
-// 3. 검색창 초기화
 const search = () => {
   const patternEn = /[a-zA-Z]/g;
   searchWord = searchInput.value;
@@ -132,7 +126,7 @@ const search = () => {
   searchInput.value = "";
   inputBox.classList.remove("on");
 };
-// 검색 도시의 날씨 보여주기
+
 const getSearchWeather = async () => {
   try {
     url = new URL(
@@ -140,14 +134,14 @@ const getSearchWeather = async () => {
     );
     let response = await fetch(url);
     let data = await response.json();
-    weather_main = data.weather[0].main;
-    weather_desc = data.weather[0].description;
-    city = data.name;
-    temp = data.main.temp - 273.15;
-    temp_max = data.main.temp_max - 273.15;
-    temp_min = data.main.temp_min - 273.15;
-    feels_like = data.main.feels_like - 273.15;
     if (response.status == 200) {
+      weather_main = data.weather[0].main;
+      weather_desc = data.weather[0].description;
+      city = data.name;
+      temp = data.main.temp - 273.15;
+      temp_max = data.main.temp_max - 273.15;
+      temp_min = data.main.temp_min - 273.15;
+      Feels_like = data.main.feels_like - 273.15;
       console.log(data);
       if (!searchWordArr.includes(searchWord)) {
         searchWordArr.push(searchWord);
