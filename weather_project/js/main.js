@@ -108,7 +108,7 @@ searchBtn.addEventListener("click", () => {
   search();
 });
 searchInput.addEventListener("keyup", (e) => {
-  if (e.keyCode === 13) {
+  if (e.key === "Enter") {
     search();
   }
 });
@@ -265,7 +265,7 @@ const forecastRender = () => {
     .map((item) => {
       return `
     <ul>
-      <li>${`${item.dt_txt}`.substr(5, 11)}</li>
+      <li>${`${item.dt_txt}`.substring(5, 16)}</li>
       <li class="weather_icon ${`${item.weather[0].main}`.toLowerCase()}"></li>
       <li>${Math.round(((item.main.temp - 273.15) * 10) / 10)}°C</li>
       <li><span class="material-symbols-outlined">toys_fan</span>${

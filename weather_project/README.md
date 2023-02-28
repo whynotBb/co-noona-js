@@ -15,7 +15,9 @@ todo
    - input에 포커스 기능 추가
 4. v 시간별 예측(4일 96 타임스탬프) 가져와 4개씩 그룹으로 페이징 하기(토글,아코디언스타일) → free 제공 안됨
    => 5일간 3시간마다의 예보 는 free 제공 됨
-   => 날짜 형식 커스텀=> 방법 찾아보고 안되면, 라이브러리(http://momentjs.com/ )=>.substr(5, 11) 기본문법으로해결
+   => 날짜 형식 커스텀=> 방법 찾아보고 안되면, 라이브러리(http://momentjs.com/ )=>.substr(5, 11) 기본문법으로해결=> 문법이 바뀌었다능,
+   https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/String/substring
+   https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/String/substr
 5.
 6. - 날씨에 따라 배경 동영상 변경
 7. v 에러 핸들링: 없는 도시 입력 / 영어가 아닌경우? https://curryyou.tistory.com/208/
@@ -25,9 +27,12 @@ todo
 9. v api key 숨기라고
    GitGuardian에서 메일 왔다;;=> api 키 다른파일로 빼고 gitignore 처리
 
-**10. - 날씨에 따라 배경 동영상 변경** 11. v tag 중복 시 추가안되는 기능
-v 5개 까지 보여주고 추가 되는 태그는 앞에서 부터 지우기
-v 태그 박스 위치 변경
+**10. - 날씨에 따라 배경 동영상 변경**
+
+11. v tag 중복 시 추가안되는 기능
+    v 5개 까지 보여주고 추가 되는 태그는 앞에서 부터 지우기
+    v 태그 박스 위치 변경
+
 **12. - 코드리팩토링**
 
 배열.join(""); => 배열을 그릴때 나타나는 쉼표 지우기 ","
