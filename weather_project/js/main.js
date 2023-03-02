@@ -24,6 +24,7 @@ setInterval(getClock, 1000);
 const API_key = config.apikey;
 let url;
 let lat, lon, weather, city, weather_temps, feels_like;
+const bgBox = document.querySelector(".bg");
 
 // 현재위치 가져오기
 function success(pos) {
@@ -61,6 +62,7 @@ const getWeather = async () => {
   feels_like = data.main.feels_like - 273.15;
   console.log("현재날씨", data);
   render();
+  bgRender();
 };
 
 // 뽑아온 날씨 데이터 그려주기
@@ -80,6 +82,23 @@ const render = () => {
     }°C : ${weather_desc}</p>
     `;
   document.querySelector(".weather").innerHTML = weatherHTML;
+};
+const bgRender = () => {
+  if (weather_main === "Clear") {
+    bgBox.innerHTML = `<video src="./resource/clear.mp4" muted autoplay loop></video>`;
+  } else if (weather_main === "Clouds") {
+    bgBox.innerHTML = `<video src="./resource/clouds.mp4" muted autoplay loop></video>`;
+  } else if (weather_main === "Rain") {
+    bgBox.innerHTML = `<video src="./resource/rainy.mp4" muted autoplay loop></video>`;
+  } else if (weather_main === "Thunderstorm") {
+    bgBox.innerHTML = `<video src="./resource/thunderstorm.mp4" muted autoplay loop></video>`;
+  } else if (weather_main === "Thunderstorm") {
+    bgBox.innerHTML = `<video src="./resource/thunderstorm.mp4" muted autoplay loop></video>`;
+  } else if (weather_main === "Snow") {
+    bgBox.innerHTML = `<video src="./resource/thunderstorm.mp4" muted autoplay loop></video>`;
+  } else if (weather_main === "Mist" || "Haze" || "Fog") {
+    bgBox.innerHTML = `<video src="./resource/foggy.mp4" muted autoplay loop></video>`;
+  }
 };
 
 //3.검색기능
@@ -153,6 +172,7 @@ const getSearchWeather = async () => {
         searchWordArr.push(searchWord);
       }
       render();
+      bgRender();
       searchListRender();
       searchListBoard.classList.add("show");
     } else {
@@ -168,15 +188,14 @@ const errorRender = (message) => {
   let errorHtml = `
   <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true">
   <div class="d-flex">
-    <div class="toast-body">
-    ${message} = '${searchWord}'
-    </div>
+    <div class="toast-body">검색 결과가 없습니다. = '${searchWord}'</div>
     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
 </div>
   `;
   document.querySelector(".error_toast").innerHTML = errorHtml;
 };
+// 검색 리스트 - 태그형식으로 최근 5개 보여주기
 const searchListRender = () => {
   console.log("searchListRender=", searchWord, searchWordArr);
   let searchWordRenderArr = searchWordArr.slice(-5);
@@ -186,6 +205,7 @@ const searchListRender = () => {
   });
   document.querySelector(".search_list_board ul").innerHTML = searchListHTML;
 };
+// 검색 태그 삭제기능
 const tagDelete = (el) => {
   el.parentElement.remove();
   searchWordArr.splice(
@@ -196,11 +216,13 @@ const tagDelete = (el) => {
     searchListBoard.classList.remove("show");
   }
 };
+// 태그 클릭 시 다시 검색해서 보여주기
 const reSearch = (el) => {
   console.log(el.innerText);
   searchWord = el.innerText;
   getSearchWeather();
 };
+// 태그박스초기화
 searchListBoardBtn.addEventListener("click", () => {
   searchListBoard.classList.remove("show");
   searchWordArr = [];

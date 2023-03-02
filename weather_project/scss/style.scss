@@ -57,7 +57,7 @@ hr {
   left: 50%;
   width: 400px;
   min-height: 270px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.6);
   border-radius: 6px;
   transform: translateX(-50%);
   color: #aaa;
@@ -226,6 +226,7 @@ hr {
     ul {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
       li {
         height: 32px;
